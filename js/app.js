@@ -1,10 +1,12 @@
 const marcasLista = document.querySelector("#vehicles_brand");
 const modelosLista = document.querySelector("#vehicles_model");
 const anoLista = document.querySelector("#vehicles_year");
-const veiculosTipo = document.querySelector("#vehicles_types")
+const veiculosTipo = document.querySelector("#vehicles_types");
+const botao = document.querySelector("#button");
+const modal = document.querySelector("#modal");
+
 
 const baseUrl = "https://parallelum.com.br/fipe/api/v1/"
-// const endpointAno= `${baseUrl}carros/marcas/${}/modelos/${}/anos/`
 
 let novotipo;
 
@@ -14,6 +16,8 @@ veiculosTipo.addEventListener("click",(event) =>{
       li.classList.remove("active")
       marcasLista.innerHTML = '';
       modelosLista.innerHTML ='';
+      anoLista.innerHTML ='';
+      botao.classList.remove("search_button_show")
     }else{
       li.classList.add("active")
        const tipos = li.getAttribute('data-type')
@@ -27,7 +31,6 @@ veiculosTipo.addEventListener("click",(event) =>{
 
 function selectTipo(novotipo, tipos){
   if(tipos != null){
-    console.log(novotipo) // PESQUISA FABRICA
     fetch(novotipo)
       .then((response) => response.json())
       .then((data) => {
@@ -41,7 +44,7 @@ function selectTipo(novotipo, tipos){
             onchange  = (event) => {
               const marcaSelecionada = event.target.value;
               let novaMarca =  `${novotipo}/${marcaSelecionada}/modelos`
-              console.log(novaMarca) // PESQUISA MODELO
+
               fetch(novaMarca)
               .then((response) => response.json())
               .then((data) => {
@@ -57,10 +60,11 @@ function selectTipo(novotipo, tipos){
                 onchange = (event) =>{
                   const modeloSelecionado = event.target.value;
                   let novoAno =  `${novotipo}/${marcaSelecionada}/modelos/${modeloSelecionado}/anos/`
-                   console.log(novoAno) // PESQUISA ANO
+
                    fetch(novoAno)
                    .then((response) => response.json())
                    .then((data) => {
+                    console.log(data)
                      data.forEach((ano) => {
                        let itemLista = document.createElement("option");
                        itemLista.innerText = ano.nome;
@@ -73,7 +77,34 @@ function selectTipo(novotipo, tipos){
                     onchange = (event) =>{
                       const anoSelecionado = event.target.value
                       let novo  = `${novotipo}/${marcaSelecionada}/modelos/${modeloSelecionado}/anos/${anoSelecionado}`
-                      console.log(novo) // PESQUISA PREÇO , COLAR AS INFORMAÇÕES DENTRO DO MODAL, SE REMOVIDO O MODAL HIDE_MODAL A TELINHA NOVA APARECE
+                      botao.classList.add("search_button_show");
+
+                      botao.addEventListener("click", (event) =>{
+                        if(modal.classList.contains("hide_modal")){
+                          modal.classList.remove("hide_modal");
+
+                          fetch(novo)
+                          .then((response) => response.json())
+                          .then(data => {
+                             document.querySelector(".reference_month .value").textContent = data.MesReferencia;
+                             document.querySelector(".fipe_code .value").textContent = data.CodigoFipe;
+                             document.querySelector(".brand .value").textContent = data.Marca;
+                             document.querySelector(".year .value").textContent = data.AnoModelo;
+                             document.querySelector(".vehicle_name").textContent = data.Modelo;
+                             document.querySelector(".price").textContent = data.Valor;
+                          })
+                        }  
+                          const modalClose = document.querySelector(".close");
+                          modalClose.addEventListener("click", (event) =>{
+                                 modal.classList.add("hide_modal");
+                                 marcasLista.innerHTML = '';
+                                 modelosLista.innerHTML ='';
+                                 anoLista.innerHTML ='';
+                                 botao.classList.remove("search_button_show")
+                          })
+                        
+                      } )
+
                     }
                    })
                   }
