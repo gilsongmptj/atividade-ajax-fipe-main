@@ -1,10 +1,7 @@
 const marcasLista = document.querySelector("#vehicles_brand");
 const modelosLista = document.querySelector("#vehicles_model");
 const anoLista = document.querySelector("#vehicles_year");
-const veiculosTipo = document.querySelector("#vehicles_types");
-const botaoPesquisa = document.querySelector("#botaoPesquisa");
-const resultadoPesquisa = document.querySelector("#info");
-const fecharResultado = document.querySelector("#closeInfo")
+const veiculosTipo = document.querySelector("#vehicles_types")
 
 const baseUrl = "https://parallelum.com.br/fipe/api/v1/"
 // const endpointAno= `${baseUrl}carros/marcas/${}/modelos/${}/anos/`
@@ -77,28 +74,12 @@ function selectTipo(novotipo, tipos){
                       const anoSelecionado = event.target.value
                       let novo  = `${novotipo}/${marcaSelecionada}/modelos/${modeloSelecionado}/anos/${anoSelecionado}`
                       console.log(novo) // PESQUISA PREÇO , COLAR AS INFORMAÇÕES DENTRO DO MODAL, SE REMOVIDO O MODAL HIDE_MODAL A TELINHA NOVA APARECE
-                      
-                     //botaoPesquisa.classList.remove("seach_button hide")
-                     //botaoPesquisa.getElementsByClassName("search_button seach_button_show").remove("hide")
-                     //botaoPesquisa.classList.add(" search_button seach_button_show") 
-                        
-                     botaoPesquisa.addEventListener("click",function(){
-  
-                      resultadoPesquisa.classList.remove("hide_modal")
-
-                      fecharResultado()
-  
-                      })
-                      fecharResultado.addEventListener("click",function(){
-                      resultadoPesquisa.classList.add("hide_modal")
-                      })
                     }
                    })
-
                   }
 
                 }
-               )
+              )
               }
             }
           )            
@@ -106,12 +87,4 @@ function selectTipo(novotipo, tipos){
       }
     )
   }
-}
-
-
-function mostrarResultado(){
-
-  document.querySelector("info1").textContent = "Abril de 2023"
-  document.querySelector("info2").textContent = marca.fipe
-  document.querySelector("info3").textContent = marca.ano
 }
